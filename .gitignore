@@ -1,6 +1,10 @@
+.gradle
 .idea
-bin
-gen
+*.iml
+gradle.properties
 local.properties
-*.swp
-*.jar
+.DS_Store
+build
+gradle
+gradlew
+gradlew.bat
