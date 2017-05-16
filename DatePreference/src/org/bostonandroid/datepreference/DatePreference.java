@@ -1,10 +1,12 @@
 package org.bostonandroid.datepreference;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -94,7 +96,7 @@ public class DatePreference extends DialogPreference implements
    * @return the SimpleDateFormat used for summary dates
    */
   public static SimpleDateFormat summaryFormatter() {
-    return new SimpleDateFormat("MMMM dd, yyyy");
+    return (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
   }
 
   @Override
@@ -137,7 +139,7 @@ public class DatePreference extends DialogPreference implements
   protected void onRestoreInstanceState(Parcelable state) {
     if (state == null || !state.getClass().equals(SavedState.class)) {
       super.onRestoreInstanceState(state);
-      setTheDate(((SavedState) state).dateValue);
+      setTheDate(defaultValue());
     } else {
       SavedState s = (SavedState) state;
       super.onRestoreInstanceState(s.getSuperState());
@@ -162,6 +164,7 @@ public class DatePreference extends DialogPreference implements
     if (shouldSave && this.changedValueCanBeNull != null) {
       setTheDate(this.changedValueCanBeNull);
       this.changedValueCanBeNull = null;
+      this.callChangeListener(getDate());
     }
   }
 
@@ -216,7 +219,36 @@ public class DatePreference extends DialogPreference implements
   /**
    * Produces the date the user has selected for the given preference, as a
    * calendar.
-   * 
+   *
+   * @param preferences
+   *          the SharedPreferences to get the date from
+   * @param field
+   *          the name of the preference to get the date from
+   * @param defaultDate
+   * the default date to use in case no preference is already saved
+   * @return a Calendar that the user has selected
+   */
+  public static Calendar getDateFor(SharedPreferences preferences, String field, Date defaultDate) {
+     String defaultString = defaultDate != null ? formatter().format(defaultDate) : "";
+     String persisted = preferences.getString(field, defaultString);
+     Date date;
+     if ("".equals(persisted)) {
+         if (defaultDate == null) {
+             return null;
+           } // if
+         date = defaultDate;
+       } else {
+         date = stringToDate(persisted);
+       } // if/else
+     Calendar cal = Calendar.getInstance();
+     cal.setTime(date);
+     return cal;
+   }
+
+  /**
+   * Produces the date the user has selected for the given preference, as a
+   * calendar.
+   *
    * @param preferences
    *          the SharedPreferences to get the date from
    * @param field
