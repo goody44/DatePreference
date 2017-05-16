@@ -88,7 +88,7 @@ public class DatePreference extends DialogPreference implements DatePicker.OnDat
      *
      * @return the SimpleDateFormat used for XML dates
      */
-    public static SimpleDateFormat formatter() {
+    public SimpleDateFormat formatter() {
         return new SimpleDateFormat("yyyy.MM.dd");
     }
 
