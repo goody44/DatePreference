@@ -184,7 +184,7 @@ public class DatePreference extends DialogPreference implements
    * 
    * @return the Calendar set to the default date
    */
-  public static Calendar defaultCalendar() {
+  public Calendar defaultCalendar() {
     return new GregorianCalendar(1970, 0, 1);
   }
 
@@ -193,7 +193,7 @@ public class DatePreference extends DialogPreference implements
    * 
    * @return a String representation of the default date
    */
-  public static String defaultCalendarString() {
+  public String defaultCalendarString() {
     return formatter().format(defaultCalendar().getTime());
   }
 
@@ -228,7 +228,7 @@ public class DatePreference extends DialogPreference implements
    * the default date to use in case no preference is already saved
    * @return a Calendar that the user has selected
    */
-  public static Calendar getDateFor(SharedPreferences preferences, String field, Date defaultDate) {
+  public Calendar getDateFor(SharedPreferences preferences, String field, Date defaultDate) {
      String defaultString = defaultDate != null ? formatter().format(defaultDate) : "";
      String persisted = preferences.getString(field, defaultString);
      Date date;
@@ -255,7 +255,7 @@ public class DatePreference extends DialogPreference implements
    *          the name of the preference to get the date from
    * @return a Calendar that the user has selected
    */
-  public static Calendar getDateFor(SharedPreferences preferences, String field) {
+  public Calendar getDateFor(SharedPreferences preferences, String field) {
     Date date = stringToDate(preferences.getString(field,
         defaultCalendarString()));
     Calendar cal = Calendar.getInstance();
@@ -263,7 +263,7 @@ public class DatePreference extends DialogPreference implements
     return cal;
   }
 
-  private static Date stringToDate(String dateString) {
+  private Date stringToDate(String dateString) {
     try {
       return formatter().parse(dateString);
     } catch (ParseException e) {
